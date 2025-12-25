@@ -1,0 +1,14 @@
+services:
+    resticprofile:
+        image: creativeprojects/resticprofile:latest
+        container_name: resticprofile
+        volumes:
+            - ${APP_DATA_FOLDER}/cache:/cache
+            - ${BACKUP_FOLDER}:/backup_repo
+            - ${SECRETS_ENV_FILE}:/config/password.txt:ro
+            - ${PHOTOS_FOLDER}:/Photos:ro
+            - ${IMMICH_DB_DUMPS_FOLDER}:/immich:ro
+        working_dir: /config
+        environment:
+            RESTIC_CACHE_DIR: /cache
+        restart: "no"

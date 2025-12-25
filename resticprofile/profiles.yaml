@@ -1,0 +1,17 @@
+version: "1"
+
+default:
+    description: "Currently just immich/photos backups"
+    repository: /backup_repo
+    password-file: /config/password.txt
+    backup:
+        source:
+            - /Photos
+            - /immich
+        exclude:
+            - "**/cache"
+            - "**/tmp"
+    retention:
+        keep-daily: 7
+        keep-weekly: 4
+        keep-monthly: 6

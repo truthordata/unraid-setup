@@ -8,11 +8,10 @@ services:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     volumes:
-      # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
-      - ${UPLOAD_LOCATION}:/data
+      - ${PHOTOS_FOLDER}:/data
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - ${SECRETS_ENV_PATH}
+      - ${SECRETS_ENV_FILE}
     ports:
       - '2283:2283'
     depends_on:
@@ -47,13 +46,13 @@ services:
     container_name: immich_postgres
     image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
     env_file:
-      - ${SECRETS_ENV_PATH}
+      - ${SECRETS_ENV_FILE}
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
-      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+      - ${APP_DATA_FOLDER}/${DB_DATA_FOLDER}:/var/lib/postgresql/data
     shm_size: 128mb
     restart: always
 
@@ -65,14 +64,14 @@ services:
     depends_on:
       - database
     env_file:
-      - ${SECRETS_ENV_PATH}
+      - ${SECRETS_ENV_FILE}
     environment:
       DB_DUMP_RETENTION: 7
       DB_USERNAME: ${DB_USERNAME}
       DB_NAME: ${DB_NAME}
     volumes:
-      - ${DB_DUMP_LOCATION}:/db_dumps
-      - /scripts:/scripts:ro
+      - ${APP_DATA_FOLDER}/${DB_DUMPS_FOLDER}:/db_dumps
+      - /container_scripts:/scripts:ro
     entrypoint: ["/bin/sh", "/scripts/db_dump.sh"]
 
 volumes:
