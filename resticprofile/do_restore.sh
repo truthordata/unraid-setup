@@ -5,9 +5,7 @@ set -euo pipefail
 # Load environment
 ########################################
 
-set -a
 source ./.env
-set +a
 
 ########################################
 # Fetch snapshots (newest → oldest)
