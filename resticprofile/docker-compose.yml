@@ -3,11 +3,18 @@ services:
         image: creativeprojects/resticprofile:latest
         container_name: resticprofile
         volumes:
+            # Required
             - ${APP_DATA_FOLDER}/cache:/cache
-            - ${BACKUP_FOLDER}:/backup_repo
             - ${SECRETS_ENV_FILE}:/config/password.txt:ro
+            # Optional
+            - ${LOCAL_BACKUP_FOLDER}:/backup_repo
+            - ${RESTORE_FOLDER}:/restore
+            # Folders (add :ro at end)
             - ${PHOTOS_FOLDER}:/Photos:ro
+            # Apps (add :ro at end)
             - ${IMMICH_DB_DUMPS_FOLDER}:/immich:ro
+            - ${NPM_APP_DATA_FOLDER}:/npm:ro
+            - ${FILE_UPLOAD_APP_DATA_FOLDER}:/file-upload:ro
         working_dir: /config
         environment:
             RESTIC_CACHE_DIR: /cache

@@ -1,13 +1,15 @@
 version: "1"
 
 default:
-    description: "Currently just immich/photos backups"
+    description: "Backup all files designated here"
     repository: /backup_repo
     password-file: /config/password.txt
     backup:
         source:
             - /Photos
             - /immich
+            - /npm
+            - /file-upload
         exclude:
             - "**/cache"
             - "**/tmp"
