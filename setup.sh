@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_CONFIG_FOLDER="/mnt/user/appconfig"
+APP_CONFIG_FOLDER="/mnt/user/config"
 
 read -r -p "Enter your desired config folder (blank defaults to: ${APP_CONFIG_FOLDER}): " DEST
 DEST="${DEST:-$APP_CONFIG_FOLDER}"
