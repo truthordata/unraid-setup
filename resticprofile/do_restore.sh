@@ -13,7 +13,11 @@ source ./.env
 
 mapfile -t SNAPSHOTS < <(
   docker compose run --rm resticprofile snapshots \
-    | awk 'NR>2 { print $1 "|" $2 " " $3 }' \
+    | awk '
+        $1 ~ /^[0-9a-f]{8,}$/ && $2 ~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/ {
+          print $1 "|" $2 " " $3
+        }
+      ' \
     | tac
 )
 

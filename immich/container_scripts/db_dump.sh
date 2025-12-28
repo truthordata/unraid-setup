@@ -15,15 +15,15 @@ pg_dump \
   --file=$FILE_OUT
 
 
-(pg_restore -l "$FILE_OUT") || {
+TOC_OUTPUT=$(pg_restore -l "$FILE_OUT") || {
   echo "ERROR: Dumped archive was unreadable; removing..."
-  rm $FILE_OUT
+  rm "$FILE_OUT"
   exit 1
 }
 
-# Simple check: Fail if no entries at all
-TOC_ENTRIES=$(pg_restore -l "$FILE_OUT" \
+TOC_ENTRIES=$(echo "$TOC_OUTPUT" \
   | awk -F: '/TOC Entries/ { gsub(/^[[:space:]]+/, "", $2); print $2 }')
+
 if [ -z "$TOC_ENTRIES" ] || [ "$TOC_ENTRIES" -eq 0 ]; then
   echo
   echo "ERROR: Dump contains no TOC entries. Aborting."

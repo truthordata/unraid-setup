@@ -4,8 +4,9 @@ services:
         container_name: resticprofile
         volumes:
             # Required
+            - ./cfg:/cfg
             - ${APP_DATA_FOLDER}/cache:/cache
-            - ${SECRETS_ENV_FILE}:/config/password.txt:ro
+            - ${SECRETS_ENV_FILE}:/cfg/password.txt:ro
             # Optional
             - ${LOCAL_BACKUP_FOLDER}:/backup_repo
             - ${RESTORE_FOLDER}:/restore
@@ -15,7 +16,7 @@ services:
             - ${IMMICH_DB_DUMPS_FOLDER}:/immich:ro
             - ${NPM_APP_DATA_FOLDER}:/npm:ro
             - ${FILE_UPLOAD_APP_DATA_FOLDER}:/file-upload:ro
-        working_dir: /config
+        working_dir: /cfg
         environment:
             RESTIC_CACHE_DIR: /cache
         restart: "no"

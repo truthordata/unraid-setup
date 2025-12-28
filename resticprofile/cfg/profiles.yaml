@@ -3,7 +3,7 @@ version: "1"
 default:
     description: "Backup all files designated here"
     repository: /backup_repo
-    password-file: /config/password.txt
+    password-file: /cfg/password.txt
     backup:
         source:
             - /Photos
