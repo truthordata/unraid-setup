@@ -57,8 +57,8 @@ services:
     restart: always
 
   # This is a custom container that was added by me.
-  immich-db-dump:
-    container_name: immich_db_dump
+  immich-db-backup:
+    container_name: immich_db_backup
     image: postgres:14
     profiles: ["manual"]
     depends_on:
@@ -71,8 +71,8 @@ services:
       DB_NAME: ${DB_NAME}
     volumes:
       - ${APP_DATA_FOLDER}/${DB_DUMPS_FOLDER}:/db_dumps
-      - /container_scripts:/scripts:ro
-    entrypoint: ["/bin/sh", "/scripts/db_dump.sh"]
+      - ./container_scripts:/scripts:ro
+    entrypoint: ["/bin/sh"]
 
 volumes:
   model-cache:
