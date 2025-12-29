@@ -19,4 +19,5 @@ services:
         working_dir: /cfg
         environment:
             RESTIC_CACHE_DIR: /cache
+            RESTIC_HOST: unraid-server
         restart: "no"
