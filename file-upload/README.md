@@ -39,8 +39,8 @@ which brings up a context menu, and select "stop".
 
 To make user access easy, we disable the need for logging in:
 
-```shell
-docker exec -it -file-upload filebrowser \
+```bash
+docker run --rm --volumes-from file-upload it filebrowser/filebrowser \
   --database /config/filebrowser.db \
   config set --auth.method=noauth
 ```
@@ -53,8 +53,8 @@ user for everyone, which is why we...
 
 This is how we limit the default (admin) user to only be able to create new files:
 
-```
-docker exec -it -file-upload filebrowser \
+```bash
+docker run --rm --volumes-from file-upload it filebrowser/filebrowser \
   --database /config/filebrowser.db \
   users update \
   --perm.admin=false \
@@ -70,3 +70,15 @@ docker exec -it -file-upload filebrowser \
 
 (Yes, include the 1, which is the admin user)
 (also yes, set admin to false, cuz otherwise it overrides the other settings).
+
+## Setting a higher session timeout
+
+The default session timeout is 2 hours; you can extend it to whatever time you want.
+
+Here I set it to 16 hours:
+
+```bash
+docker run --rm --volumes-from file-upload it filebrowser/filebrowser \
+  --database /config/filebrowser.db \
+  config set --tokenExpirationTime 16h
+```
