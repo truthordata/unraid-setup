@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-UPLOAD_ROOT="/mnt/user/user_uploads"
 MEDIA_ROOT="/mnt/user/Media"
 
+UPLOAD_ROOT="$MEDIA_ROOT/user_uploads"
 MOVIE_DEST="$MEDIA_ROOT/movies"
 SHOW_DEST="$MEDIA_ROOT/shows"
 
@@ -45,28 +45,50 @@ MOVIE_SRC="$UPLOAD_ROOT/movies"
 
 if [[ -d "$MOVIE_SRC" ]]; then
     shopt -s nullglob
-    for file in "$MOVIE_SRC"/*; do
-        [[ -f "$file" ]] || continue
+    for entry in "$MOVIE_SRC"/*; do
+        base="$(basename "$entry")"
 
-        base="$(basename "$file")"
+        ################################
+        # Standalone movie file
+        ################################
+        if [[ -f "$entry" ]]; then
+            if file_active "$entry"; then
+                echo "SKIP movie $base (active)"
+                continue
+            fi
 
-        if file_active "$file"; then
-            echo "SKIP movie $base (active)"
-            continue
+            ext="${base##*.}"
+            name="${base%.*}"
+            norm="$(normalize_name "$name")"
+
+            dest_dir="$MOVIE_DEST/$norm"
+            mkdir -p "$dest_dir"
+
+            mv "$entry" "$dest_dir/$norm.$ext"
+            echo "OK   movie $norm"
         fi
 
-        ext="${base##*.}"
-        name="${base%.*}"
-        norm="$(normalize_name "$name")"
+        ################################
+        # Movie folder
+        ################################
+        if [[ -d "$entry" ]]; then
+            if find "$entry" -type f | while read -r f; do
+                file_active "$f" && exit 1
+            done; then
+                :
+            else
+                echo "SKIP movie $base (active files)"
+                continue
+            fi
 
-        dest_dir="$MOVIE_DEST/$norm"
-        mkdir -p "$dest_dir"
+            norm="$(normalize_name "$base")"
+            dest_dir="$MOVIE_DEST/$norm"
 
-        mv "$file" "$dest_dir/$norm.$ext"
-        echo "OK   movie $norm"
+            mv "$entry" "$dest_dir"
+            echo "OK   movie $norm (folder)"
+        fi
     done
 fi
-
 
 ########################################
 # SHOWS
