@@ -10,6 +10,8 @@ services:
     volumes:
       - ${PHOTOS_FOLDER}:/data
       - /etc/localtime:/etc/localtime:ro
+    devices:
+      - /dev/dri:/dev/dri
     env_file:
       - ${SECRETS_ENV_FILE}
     ports:
