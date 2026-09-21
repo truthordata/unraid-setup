@@ -11,4 +11,6 @@ compose() {
 }
 
 # NOTE: requires the compose stack to be running (uses the actively running container)
+echo "Preparing to execute paperless-ngx document_exporter..."
 compose exec -T webserver document_exporter /usr/src/paperless/export
+echo "paperless-ngx document export completed successfully!"

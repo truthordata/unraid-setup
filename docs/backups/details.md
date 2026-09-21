@@ -48,8 +48,8 @@ To conduct the nightly Restic backup procedure, we use `User Scripts`.
 `User Scripts` automatically calls a script called `create_backups` at our designated CRON time, where it:
 
 1. navigates to `/mnt/user/config/scripts` and calls `create_backups.sh`
-2. `create_backups.sh` navigates up to `../resticprofile` and calls `do_backups.sh` to do all backups
-3. `do_backups.sh` works through specified app folders (`/mnt/user/config/<app_name>`) to perform their respective backup procedures.
+2. `create_backups.sh` navigates up to `../resticprofile` and calls `do_all_backups.sh` to do all backups
+3. `do_all_backups.sh` works through specified app folders (`/mnt/user/config/<app_name>`) to perform their respective backup procedures.
 
 
 

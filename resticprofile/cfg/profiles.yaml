@@ -1,5 +1,20 @@
 version: "1"
 
+# When adding/debugging, you can do this to show just rendered template (without running the actual backup):
+# docker compose run --rm resticprofile --name <profile> --trace show
+
+# this injects this literal block (indents and all) into the locations referenced.
+# unfortunately this is a biproduct of how resticprofile parses this.
+{{ define "failure_hook" }}
+        send-after-fail:
+            method: POST
+            url: "{{ .Env.HA_WEBHOOK_URL }}"
+            body-template: /cfg/failure_template.json
+            headers:
+                - name: Content-Type
+                  value: application/json
+{{ end }}
+
 local:
     repository: /backup_repo
     password-file: /cfg/password.txt
@@ -8,17 +23,16 @@ local:
         keep-weekly: 4
         keep-monthly: 6
     backup:
-        send-after-fail:
-            method: POST
-            url: http://192.168.4.41:8123/api/webhook/restic_backup_failed
+{{ template "failure_hook" . }}
 
 remote:
     inherit: local
     copy:
         initialize: true
         initialize-copy-chunker-params: true
-        repository: "s3:https://s3.us-east-005.backblazeb2.com/sawickiserver-backup"
+        repository: "{{ .Env.BACKBLAZE_BUCKET_PATH }}"
         password-file: /cfg/password.txt
+{{ template "failure_hook" . }}
 
 immich:
     inherit: local
@@ -46,6 +60,12 @@ home-assistant:
         source:
             - /home-assistant
 
+jellyfin:
+    inherit: local
+    backup:
+        source:
+            - /jellyfin
+
 npm:
     inherit: local
     backup:
@@ -65,7 +85,8 @@ file-upload:
             - "**/tmp"
 
 groups:
-    everything:
+    # everything but jellyfin, which is handled separately
+    almost_everything:
         - immich
         - paperless-ngx
         - documents

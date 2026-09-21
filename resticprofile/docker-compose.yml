@@ -1,3 +1,5 @@
+name: resticprofile
+
 services:
     resticprofile:
         image: creativeprojects/resticprofile:latest
@@ -13,7 +15,8 @@ services:
             - ${IMMICH_FOLDER}:/immich:ro
             - ${PAPERLESS_FOLDER}:/paperless-ngx:ro
             - ${DOCUMENTS_FOLDER}:/documents:ro
-            - ${HOME_ASSISTANT_FOLDER}:/home-assistant
+            - ${HOME_ASSISTANT_FOLDER}:/home-assistant:ro
+            - ${JELLYFIN_FOLDER}:/jellyfin:ro
             - ${NPM_APP_DATA_FOLDER}:/npm:ro
             - ${FILE_UPLOAD_APP_DATA_FOLDER}:/file-upload:ro
         working_dir: /cfg
