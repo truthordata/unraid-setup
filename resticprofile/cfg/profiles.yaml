@@ -1,19 +1,74 @@
 version: "1"
 
-default:
-    description: "Backup all files designated here"
+local:
     repository: /backup_repo
     password-file: /cfg/password.txt
-    backup:
-        source:
-            - /Photos
-            - /immich
-            - /npm
-            - /file-upload
-        exclude:
-            - "**/cache"
-            - "**/tmp"
     retention:
         keep-daily: 7
         keep-weekly: 4
         keep-monthly: 6
+    backup:
+        send-after-fail:
+            method: POST
+            url: http://192.168.4.41:8123/api/webhook/restic_backup_failed
+
+remote:
+    inherit: local
+    copy:
+        initialize: true
+        initialize-copy-chunker-params: true
+        repository: "s3:https://s3.us-east-005.backblazeb2.com/sawickiserver-backup"
+        password-file: /cfg/password.txt
+
+immich:
+    inherit: local
+    backup:
+        source:
+            - /immich
+
+paperless-ngx:
+    inherit: local
+    backup:
+        source:
+            - /paperless-ngx
+
+documents:
+    inherit: local
+    backup:
+        source:
+            - /documents
+        exclude:
+            - /paperless-ngx
+
+home-assistant:
+    inherit: local
+    backup:
+        source:
+            - /home-assistant
+
+npm:
+    inherit: local
+    backup:
+        source:
+            - /npm
+        exclude:
+            - "**/cache"
+            - "**/tmp"
+
+file-upload:
+    inherit: local
+    backup:
+        source:
+            - /file-upload
+        exclude:
+            - "**/cache"
+            - "**/tmp"
+
+groups:
+    everything:
+        - immich
+        - paperless-ngx
+        - documents
+        - home-assistant
+        - npm
+        - file-upload

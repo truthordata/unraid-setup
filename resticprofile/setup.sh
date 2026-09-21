@@ -7,12 +7,12 @@ source .env
 mkdir -p ${APP_DATA_FOLDER}/cache
 
 # Create secrets file if missing
-if [ ! -f ${SECRETS_ENV_FILE} ]; then
-    docker compose run --rm resticprofile generate --random-key > ${SECRETS_ENV_FILE}
-    chmod 600 "${SECRETS_ENV_FILE}"
+if [ ! -f ${RESTIC_PASSWORD_TXT} ]; then
+    docker compose run --rm resticprofile generate --random-key > ${RESTIC_PASSWORD_TXT}
+    chmod 600 "${RESTIC_PASSWORD_TXT}"
 
-    echo "Created a password file at ${SECRETS_ENV_FILE} with password:"
-    cat ${SECRETS_ENV_FILE}
+    echo "Created a password file at ${RESTIC_PASSWORD_TXT} with password:"
+    cat ${RESTIC_PASSWORD_TXT}
     echo
     echo "---!!!IMPORTANT!!!---"
     echo "SAVE THE PASSWORD SOMEWHERE (ex: password manager); YOU CANNOT ACCESS YOUR BACKUPS WITHOUT IT!!!"

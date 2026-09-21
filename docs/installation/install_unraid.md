@@ -12,15 +12,15 @@ This is what you will use to log in anytime you want to mess with the Unraid OS.
 There are 3 main classes of storage:
 
 - `Primary`
-  - Set to NVME drive
-  - Used for application config and runtimes
+    + Set to NVME drive
+    + Used for application config and runtimes
 - `Cache`
-  - Set to SSD
-  - Used as a "staging/waiting ground" for the `Array`
+    + Set to SSD
+    + Used as a "staging/waiting ground" for the `Array`
 - `Array`
-  - Set to (all of) your HDDs
-  - Used for long term user storage, particularly for larger files
-  - This is where most of your traditional "files" will go
+    + Set to (all of) your HDDs
+    + Used for long term user storage, particularly for larger files
+    + This is where most of your traditional "files" will go
 
 
 ## Start your array

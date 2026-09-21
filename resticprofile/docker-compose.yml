@@ -5,18 +5,20 @@ services:
         volumes:
             # Required
             - ./cfg:/cfg
+            - ${RESTIC_PASSWORD_TXT}:/cfg/password.txt:ro
             - ${APP_DATA_FOLDER}/cache:/cache
-            - ${SECRETS_ENV_FILE}:/cfg/password.txt:ro
-            # Optional
-            - ${LOCAL_BACKUP_FOLDER}:/backup_repo
-            - ${RESTORE_FOLDER}:/restore
-            # Folders (add :ro at end)
-            - ${PHOTOS_FOLDER}:/Photos:ro
+            - ${SERVER_BACKUP_FOLDER}:/backup_repo
+            - ${SERVER_RESTORE_FOLDER}:/restore
             # Apps (add :ro at end)
-            - ${IMMICH_DB_DUMPS_FOLDER}:/immich:ro
+            - ${IMMICH_FOLDER}:/immich:ro
+            - ${PAPERLESS_FOLDER}:/paperless-ngx:ro
+            - ${DOCUMENTS_FOLDER}:/documents:ro
+            - ${HOME_ASSISTANT_FOLDER}:/home-assistant
             - ${NPM_APP_DATA_FOLDER}:/npm:ro
             - ${FILE_UPLOAD_APP_DATA_FOLDER}:/file-upload:ro
         working_dir: /cfg
+        env_file:
+            - ${SECRETS_ENV_FILE}
         environment:
             RESTIC_CACHE_DIR: /cache
             RESTIC_HOST: unraid-server
